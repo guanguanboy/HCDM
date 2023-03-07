@@ -1,0 +1,8 @@
+torch>=1.6
+torchvision
+numpy
+pandas
+tqdm
+tensorboardX>=1.14
+scipy 
+opencv-python
