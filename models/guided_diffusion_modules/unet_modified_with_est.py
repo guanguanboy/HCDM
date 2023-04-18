@@ -555,7 +555,7 @@ class UNet(nn.Module):
         """
         #print('x.shape=', x.shape)
         #print('x first 3 channel=', x[:,0:3,:,:].shape) #前三个通道是退化掉的合成图像
-        noise_level = self.estimation_net(x[:,0:3,:,:], mask) #
+        noise_map = self.estimation_net(x[:,0:3,:,:], mask) #
 
         hs = []
         gammas = gammas.view(-1, )
@@ -564,7 +564,7 @@ class UNet(nn.Module):
         output = []
         #output.append(noise_level)
 
-        x_est = torch.cat([x, noise_level], dim=1)
+        x_est = torch.cat([x, noise_map], dim=1)
 
         h = x_est.type(torch.float32)
         for module in self.input_blocks:
@@ -590,7 +590,7 @@ class UNet(nn.Module):
 
         h = h.type(x.dtype)
         output.append(self.out(h))
-        return noise_level, output
+        return noise_map, output
 
 class FCN(nn.Module):
     def __init__(self):
@@ -604,7 +604,7 @@ class FCN(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv2d(32, 32, 3, padding=1),
             nn.ReLU(inplace=True),
-            nn.Conv2d(32, 3, 3, padding=1),
+            nn.Conv2d(32, 1, 3, padding=1),
             nn.ReLU(inplace=True)
         )
 

@@ -98,10 +98,10 @@ class RIHD(BaseModel):
             self.optG.zero_grad()
             
             #for original ddpm
-            #loss = self.netG(self.gt_image, self.cond_image, mask=self.mask) #输入分别是真实图片，条件图片（合成图片）和掩码
+            loss = self.netG(self.gt_image, self.cond_image, mask=self.mask) #输入分别是真实图片，条件图片（合成图片）和掩码
             #for improved ddpm
-            losses = self.netG(self.gt_image, self.cond_image, mask=self.mask) #输入分别是真实图片，条件图片（合成图片）和掩码
-            loss = (losses["loss"]).mean()
+            #losses = self.netG(self.gt_image, self.cond_image, mask=self.mask) #输入分别是真实图片，条件图片（合成图片）和掩码
+            #loss = (losses["loss"]).mean()
 
             loss.backward()
             self.optG.step()

@@ -28,11 +28,11 @@ def addGaussNoise(s):
 
 
 
-sub_dataset_list = ['/data1/liguanlin/Datasets/iHarmony/HFlickr','/data1/liguanlin/Datasets/iHarmony/HCOCO','/data1/liguanlin/Datasets/iHarmony/HAdobe5k']
+sub_dataset_list = ['/data1/liguanlin/Datasets/iHarmony']
 
 for sub_dataset_name in sorted(sub_dataset_list):
     
-    comp_file_path = sub_dataset_name + '/composite_images/' #原始合成图像路径
+    comp_file_path = sub_dataset_name + '/composite_images_test/' #原始合成图像路径
     comp_file_list = os.listdir(comp_file_path) #获取合成图像的list
 
     mask_file_path = sub_dataset_name + '/masks/' #原始合成图像mask路径
@@ -70,7 +70,7 @@ for sub_dataset_name in sorted(sub_dataset_list):
                     noisy_roi[i,j,:] = numpy_noisy_comp[i,j,:] #噪声图像背景赋值给背景
 
         #生成带噪图的存储文件夹
-        save_noisy_img_path = sub_dataset_name + '/composite_noisy25_f_blured_b_images_istropic/'
+        save_noisy_img_path = sub_dataset_name + '/composite_images_test_noisy25_f_blured_b/'
         if not os.path.exists(save_noisy_img_path):
             os.mkdir(save_noisy_img_path)
         noisy_img_name = save_noisy_img_path + image #带噪图的image地址
