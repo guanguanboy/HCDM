@@ -832,10 +832,29 @@ def add_blur(input_path):
 
 def add_blur_to_img(img):
 
+    img = util.uint2single(img)
+
     k = anisotropic_Gaussian(ksize=15, theta=np.pi, l1=6, l2=6)
 
     # 2) srmd degradation
     img_s = srmd_degradation(img, k, sf=1)
+    img_s = util.single2uint(img_s)
+    #print(img_s.shape)
+    #print('img_s type=', type(img_s))
+    #img_s = np.rollaxis(img_s, axis=2)
+    #print('rolled img_s type=', type(img_s))
+    #print(img_s.shape)
+
+    return img_s
+
+def add_blur_to_img_isotropic(img):
+
+    img = util.uint2single(img)
+
+    kernel = utils_deblur.fspecial('gaussian', 15, 0.01)  # Gaussian kernel, delta kernel 0.01
+
+    # 2) srmd degradation
+    img_s = srmd_degradation(img, kernel, sf=1)
     img_s = util.single2uint(img_s)
     #print(img_s.shape)
     #print('img_s type=', type(img_s))

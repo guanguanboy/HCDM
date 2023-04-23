@@ -57,7 +57,7 @@ for sub_dataset_name in sorted(sub_dataset_list):
         noisy_comp = addGaussNoise(numpy_comp.view()) #添加噪声，生成全图噪声
         numpy_noisy_comp = np.array(noisy_comp*255, dtype='uint8') #将噪声图转换numpy格式
 
-        blur_img = add_blur_to_img(numpy_comp.view())
+        blur_img = add_blur_to_img_isotropic(numpy_comp.view())
         #生成一张空图，用来接受原始合成图的背景和噪声全图的前景
         noisy_roi = np.zeros((numpy_comp.shape[0], numpy_comp.shape[1], numpy_comp.shape[2]), dtype='uint8')
 
@@ -65,12 +65,12 @@ for sub_dataset_name in sorted(sub_dataset_list):
         for i in range(width):
             for j in range(height):
                 if numpy_mask[i,j] == False:
-                    noisy_roi[i,j,:] = blur_img[i,j,:] #原始合成图像背景赋值给背景
+                    noisy_roi[i,j,:] = numpy_noisy_comp[i,j,:] #背景是noise
                 elif numpy_mask[i,j] == True:
-                    noisy_roi[i,j,:] = numpy_noisy_comp[i,j,:] #噪声图像背景赋值给背景
+                    noisy_roi[i,j,:] = blur_img[i,j,:] #前景blur
 
         #生成带噪图的存储文件夹
-        save_noisy_img_path = sub_dataset_name + '/composite_images_test_noisy25_f_blured_b_anistropic/'
+        save_noisy_img_path = sub_dataset_name + '/composite_images_test_blured_f_noisy25_b_istropic/'
         if not os.path.exists(save_noisy_img_path):
             os.mkdir(save_noisy_img_path)
         noisy_img_name = save_noisy_img_path + image #带噪图的image地址

@@ -141,7 +141,7 @@ class Network(BaseNetwork):
             t = torch.full((b,), i, device=y_cond.device, dtype=torch.long)
             y_t = self.p_sample(y_t, t, y_cond=y_cond, mask=mask) #将y_t作为下一个迭代的输入来生成新的y_t #会在p_sample调用函数。
             if mask is not None:
-                y_t = y_0*(1.-mask) + mask*y_t #得到y_t之后，将y_t作为下一个sample 生成的输入
+                y_t = y_cond*(1.-mask) + mask*y_t #得到y_t之后，将y_t作为下一个sample 生成的输入
             if i % sample_inter == 0:
                 ret_arr = torch.cat([ret_arr, y_t], dim=0)
         return y_t, ret_arr
@@ -164,12 +164,12 @@ class Network(BaseNetwork):
         mask_resized_list = resize_tensor(mask)
 
         loss = 0
-        noise_level_gt = torch.ones_like(y_0)*0.25
+        noise_level_gt = torch.ones_like(mask)*0.25
         if mask is not None: #如果包含mask，则去噪的时候，将随机噪声y_noisy*mask+真实图片*（1-mask）作为一个输入
             noise_level, noise_hat_list = self.denoise_fn(torch.cat([y_cond, y_noisy*mask+(1.-mask)*y_0], dim=1), mask, sample_gammas)
             #print(len(noise_resized_list), len(mask_resized_list),len(noise_hat_list))
 
-            loss += 0.2 * (F.mse_loss(noise_level*mask, noise_level_gt*mask)) #for noise estimation
+            loss += F.mse_loss(noise_level*mask, noise_level_gt*mask) #for noise estimation
             for i in range(len(noise_hat_list)):
                 loss += self.loss_fn(mask_resized_list[i]*noise_resized_list[i], mask_resized_list[i]*noise_hat_list[i])
         else:
