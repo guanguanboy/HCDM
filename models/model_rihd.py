@@ -79,7 +79,7 @@ class RIHD(BaseModel):
         ret_result = []
         for idx in range(self.batch_size):
             ret_path.append('In_{}'.format(self.path[idx]))
-            ret_result.append(self.gt_image[idx].detach().float().cpu())
+            ret_result.append(self.cond_image[idx].detach().float().cpu())
 
             ret_path.append('Process_{}'.format(self.path[idx]))
             ret_result.append(self.visuals[idx::self.batch_size].detach().float().cpu())
