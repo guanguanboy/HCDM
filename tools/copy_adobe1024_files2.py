@@ -26,7 +26,4 @@ with open(testfile,'r') as f:
             dst_img_path = os.path.join(test_dst_root, line_strip)
             copyfile(img_path, dst_img_path)
             test_count = test_count + 1
-print('test_count==', test_count)            
-
-mask_count = 0
-mask_root = dataset_root + 'masks/'
+print('test_count==', test_count)
