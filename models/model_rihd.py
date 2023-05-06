@@ -79,7 +79,7 @@ class RIHD(BaseModel):
         ret_result = []
         for idx in range(self.batch_size):
             ret_path.append('In_{}'.format(self.path[idx]))
-            ret_result.append(self.cond_image[idx].detach().float().cpu())
+            ret_result.append(self.gt_image[idx].detach().float().cpu())
 
             ret_path.append('Process_{}'.format(self.path[idx]))
             ret_result.append(self.visuals[idx::self.batch_size].detach().float().cpu())
@@ -87,6 +87,8 @@ class RIHD(BaseModel):
             ret_path.append('Out_{}'.format(self.path[idx]))
             ret_result.append(self.visuals[idx-self.batch_size].detach().float().cpu()) #这里记录的是idx减去batch_size的
 
+            ret_path.append('Comp_{}'.format(self.path[idx]))
+            ret_result.append(self.cond_image[idx].detach().float().cpu())
         self.results_dict = self.results_dict._replace(name=ret_path, result=ret_result)
         return self.results_dict._asdict()
 
