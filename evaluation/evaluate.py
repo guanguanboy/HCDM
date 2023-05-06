@@ -33,12 +33,12 @@ if __name__ == '__main__':
     #output_path = '/data1/liguanlin/research_projects/DPM/Palette-Image-to-Image-Diffusion-Models/experiments/test_harmonization_day2night_220514_102412/results/test/0/'
     #output_path = '/data1/liguanlin/research_projects/DPM/Palette-Image-to-Image-Diffusion-Models/experiments/test_harmonization_day2night_220514_150437/results/test/0/'
     #output_path = '/data1/liguanlin/research_projects/DPM/Palette-Image-to-Image-Diffusion-Models/experiments/test_harmonization_day2night_220527_165832/results/test/0/'
-    output_path = '/data1/liguanlin/research_projects/DPM/Palette-Image-to-Image-Diffusion-Models/experiments/test_harmonization_day2night_improved_220803_153028/results/test/0/'
+    output_path = '/data1/liguanlin/codes/research_projects/H-CDM/H-CDM/experiments/test_harmonization_allinone_230504_154537/results/test/0/'
+
+    subdataset_path = '/data1/liguanlin/Datasets/iHarmony/Hday2night/'
 
 
-
-
-    files = '/data1/liguanlin/Datasets/iHarmony/Hday2night/Hday2night_test.txt'
+    files = subdataset_path + 'Hday2night_test.txt'
     #files = '/mnt/cfs/liguanlin/Datasets/iHarmony4/HFlickr/HFlickr_test.txt'
     #files = '/mnt/cfs/liguanlin/Datasets/iHarmony4/HCOCO/HCOCO_test.txt'
     #files = '/mnt/cfs/liguanlin/Datasets/iHarmony4/HAdobe5k/HAdobe5k_test.txt'
@@ -48,14 +48,14 @@ if __name__ == '__main__':
                 
                 harmonized_img_name = 'Out_' + name_str
                 harmonized_path = os.path.join(output_path, harmonized_img_name)
-                
+
                 real_img_name = 'In_' + name_str
                 real_path = os.path.join(output_path, real_img_name)
 
                 name_parts=name_str.split('_')
                 mask_img_name = name_str.replace(('_'+name_parts[-1]),'.png')
 
-                mask_path = '/data1/liguanlin/Datasets/iHarmony/Hday2night/masks/' + mask_img_name
+                mask_path = subdataset_path + 'masks/' + mask_img_name
 
                 real_paths.append(real_path)
                 harmonized_paths.append(harmonized_path)
