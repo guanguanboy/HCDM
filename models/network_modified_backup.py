@@ -141,7 +141,7 @@ class Network(BaseNetwork):
             t = torch.full((b,), i, device=y_cond.device, dtype=torch.long)
             y_t = self.p_sample(y_t, t, y_cond=y_cond) #将y_t作为下一个迭代的输入来生成新的y_t #会在p_sample调用函数。
             if mask is not None:
-                y_t = y_cond*(1.-mask) + mask*y_t #得到y_t之后，将y_t作为下一个sample 生成的输入
+                y_t = y_0*(1.-mask) + mask*y_t #得到y_t之后，将y_t作为下一个sample 生成的输入
             if i % sample_inter == 0:
                 ret_arr = torch.cat([ret_arr, y_t], dim=0)
         return y_t, ret_arr
