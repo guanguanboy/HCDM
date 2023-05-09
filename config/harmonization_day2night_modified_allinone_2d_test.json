@@ -1,0 +1,159 @@
+{
+    "name": "harmonization_allinone", // experiments name
+    "gpu_ids": [1], // gpu ids list, default is single 0
+    "seed" : -1, // random seed, seed <0 represents randomization not used 
+    "finetune_norm": false, // find the parameters to optimize
+
+    "path": { //set every part file path
+        "base_dir": "experiments", // base path for all log except resume_state
+        "code": "code", // code backup
+        "tb_logger": "tb_logger", // path of tensorboard logger
+        "results": "results",
+        "checkpoint": "checkpoint",
+        // "resume_state": "experiments/debug_inpainting_celebahq_220426_150122/checkpoint/1" 
+        "resume_state": "experiments/train_harmonization_allinone_230505_154431/checkpoint/550"//pretrained_model/checkpoint/770" //"experiments/train_harmonization_day2night_220520_113349/checkpoint/6300" //"experiments/train_harmonization_day2night_220511_105812/checkpoint/10000"//"experiments/train_harmonization_day2night_220506_220001/checkpoint/3370"//"experiments/train_harmonization_day2night_220430_123856/checkpoint/1850" // ex: 100, loading .state  and .pth from given epoch and iteration
+    },
+
+    "datasets": { // train or test
+        "train": { 
+            "which_dataset": {  // import designated dataset using arguments 
+                "name": ["data.dataset", "HarmonizationTrainDataset"], // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
+                "args":{ // arguments to initialize dataset
+                    "data_root": "/data1/liguanlin/Datasets/iHarmony/composite_images_train_noisy25/",
+                    "data_len": -1,
+                    "mask_config": {
+                        "mask_mode": "hybrid"
+                    }
+                } 
+            },
+            "dataloader":{
+                "validation_split": 2, // percent or number 
+                "args":{ // arguments to initialize train_dataloader
+                    "batch_size": 6, // batch size in each gpu
+                    "num_workers": 4,
+                    "shuffle": true,
+                    "pin_memory": true,
+                    "drop_last": true
+                },
+                "val_args":{ // arguments to initialize valid_dataloader, will overwrite the parameters in train_dataloader
+                    "batch_size": 1, // batch size in each gpu
+                    "num_workers": 4,
+                    "shuffle": false,
+                    "pin_memory": true,
+                    "drop_last": false
+                }
+            }
+        },
+        "test": { 
+            "which_dataset": {
+                "name": "HarmonizationTestDataset", // import Dataset() class / function(not recommend) from default file
+                "args":{
+                    "data_root": "./TestData/Hday2night/composite_images_test/", //test on whole dataset /data1/liguanlin/Datasets/iHarmony/composite_images_test/
+                    "mask_config": {
+                        "mask_mode": "center"
+                    }
+                }
+            },
+            "dataloader":{
+                "args":{
+                    "batch_size": 1,
+                    "num_workers": 4,
+                    "pin_memory": true
+                }
+            }
+        }
+    },
+
+    "model": { // networks/metrics/losses/optimizers/lr_schedulers is a list and model is a dict
+        "which_model": { // import designated  model(trainer) using arguments 
+            "name": ["models.model_rihd", "RIHD"], // import Model() class / function(not recommend) from models.model.py (default is [models.model.py])
+            "args": {
+                "sample_num": 8, // process of each image
+                "task": "inpainting",
+                "ema_scheduler": {
+                    "ema_start": 1e3,
+                    "ema_iter": 1e3,
+                    "ema_decay": 0.9999
+                }
+                // "ema_scheduler": { // debug
+                //     "ema_start": 0,
+                //     "ema_iter": 10,
+                //     "ema_decay": 0.9999
+                // }
+            }
+        }, 
+        "which_networks": [ // import designated list of networks using arguments
+            {
+                "name": ["models.network_modified", "Network"], // import Network() class / function(not recommend) from default file (default is [models/network.py]) 
+                "args": { // arguments to initialize network
+                    "init_type": "kaiming", // method can be [normal | xavier| xavier_uniform | kaiming | orthogonal], default is kaiming
+                    "module_name": "noise_level_estimation", // sr3 | guided_diffusion
+                    "unet": {
+                        "in_channel": 7,
+                        "out_channel": 3,
+                        "inner_channel": 64,
+                        "channel_mults": [
+                            1,
+                            2,
+                            4,
+                            8
+                        ],
+                        "attn_res": [
+                            // 32,
+                            16
+                            // 8
+                        ],
+                        "num_head_channels": 32,
+                        "res_blocks": 2,
+                        "dropout": 0.2,
+                        "image_size": 256
+                    },
+                    "beta_schedule": {
+                        "train": {
+                            "schedule": "linear",
+                            "n_timestep": 2000,
+                            // "n_timestep": 10, // debug
+                            "linear_start": 1e-6,
+                            "linear_end": 0.01
+                        },
+                        "test": {
+                            "schedule": "linear",
+                            "n_timestep": 1000,
+                            "linear_start": 1e-4,
+                            "linear_end": 0.09
+                        }
+                    }
+                }
+            }
+        ],
+        "which_optimizers": [ // len(networks) == len(optimizers) == len(lr_schedulers), it will be deleted after initialization if not used.
+            { "name": "Adam", "args":{ "lr": 5e-5, "weight_decay": 0}}
+        ],
+        "which_lr_schedulers": [ // {} represents None, it will be deleted after initialization.
+            {}
+            // { "name": "LinearLR", "args": { "start_factor": 0.2, "total_iters": 1e3 }} // support in newest pytorch vision
+        ],
+        "which_losses": [ // import designated list of losses without arguments
+            "l1_loss" // import mse_loss() function/class from default file (default is [models/losses.py]), equivalent to { "name": "mse_loss", "args":{}}
+        ],
+        "which_metrics": [ // import designated list of metrics without arguments
+            "mae" // import mae() function/class from default file (default is [models/metrics.py]), equivalent to { "name": "mae", "args":{}}
+        ]
+    },
+
+    "train": { // arguments for basic training
+        "n_epoch": 1e6, // max epochs, not limited now
+        "n_iter": 1e8, // max interations
+        "val_epoch": 100, // valdation every specified number of epochs
+        "save_checkpoint_epoch": 5,
+        "log_iter": 1e4, // log every specified number of iterations
+        "tensorboard" : true // tensorboardX enable
+    },
+    
+    "debug": { // arguments in debug mode, which will replace arguments in train
+        "val_epoch": 1,
+        "save_checkpoint_epoch": 1,
+        "log_iter": 2,
+        "debug_split": 50 // percent or number, change the size of dataloder to debug_split.
+    }
+}
