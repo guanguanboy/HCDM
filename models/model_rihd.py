@@ -3,6 +3,10 @@ import tqdm
 from core.base_model import BaseModel
 from core.logger import LogTracker
 import copy
+from thop import profile
+from thop import clever_format
+import numpy as np
+
 class EMA():
     def __init__(self, beta=0.9999):
         super().__init__()
@@ -54,7 +58,50 @@ class RIHD(BaseModel):
 
         self.sample_num = sample_num
         self.task = task
-        
+        #self.evaluate_efficiency(image_size = 256)
+        #self.evaluate_inference_speed(image_size=256)
+
+
+    def evaluate_efficiency(self,image_size = 256):
+        size = image_size
+        gt = torch.randn((1,3,size,size)).cuda()
+        cond = torch.randn(1,3,size,size).cuda()
+        mask = torch.randn(1,1,size,size).cuda()
+
+        flops, params = profile(self.netG, inputs=(gt, cond, mask))
+        flops, params = clever_format([flops, params], '%.3f')
+
+        print('params=', params)
+        print('FLOPs=',flops)
+
+    def evaluate_inference_speed(self, image_size=256):
+        size = image_size
+        gt = torch.randn((1,3,size,size)).cuda()
+        cond = torch.randn(1,3,size,size).cuda()
+        mask = torch.randn(1,1,size,size).cuda()
+
+        starter, ender = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
+        repetitions = 300
+        timings=np.zeros((repetitions,1))
+        #GPU-WARM-UP
+        for _ in range(10):
+            _ = self.netG(gt, cond, mask)             
+        # MEASURE PERFORMANCE
+        with torch.no_grad():
+            for rep in range(repetitions):
+                starter.record()
+                _ = self.netG(gt, cond, mask)  
+                ender.record()
+                # WAIT FOR GPU SYNC
+                torch.cuda.synchronize()
+                curr_time = starter.elapsed_time(ender)
+                timings[rep] = curr_time
+        mean_syn = np.sum(timings) / repetitions
+        std_syn = np.std(timings)
+        mean_fps = 1000. / mean_syn
+        print(' * Mean@1 {mean_syn:.3f}ms Std@5 {std_syn:.3f}ms FPS@1 {mean_fps:.2f}'.format(mean_syn=mean_syn, std_syn=std_syn, mean_fps=mean_fps))
+        print(mean_syn)
+
     def set_input(self, data):
         ''' must use set_device in tensor '''
         self.cond_image = self.set_device(data.get('cond_image')) #条件图像，合成图像

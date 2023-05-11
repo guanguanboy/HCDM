@@ -4,7 +4,8 @@ import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+#from PIL import Image
+#count = 0
 from .nn import (
     checkpoint,
     zero_module,
@@ -557,6 +558,14 @@ class UNet(nn.Module):
         #print('x first 3 channel=', x[:,0:3,:,:].shape) #前三个通道是退化掉的合成图像
         noise_map = self.estimation_net(x[:,0:3,:,:], mask) #
 
+        #保存noise_map
+        """
+        global count
+        noise_map_byte = (noise_map.cpu() * 255).byte()
+        noise_map_img = Image.fromarray(noise_map_byte.squeeze().numpy(), mode='L')
+        noise_map_img.save('/data1/liguanlin/codes/research_projects/H-CDM/H-CDM/TestData/noise_map/dm_{}.png'.format(count))
+        count=count+1
+        """
         hs = []
         gammas = gammas.view(-1, )
         emb = self.cond_embed(gamma_embedding(gammas, self.inner_channel))
