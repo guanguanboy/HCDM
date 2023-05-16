@@ -19,10 +19,12 @@ pip install -r requirements.txt
 ### Test
 
 2D Map:
+
 Download the pretained models frist and put the models under 'pretrained_model\checkpoint\2d_map\ ' directory. Then run the follow code:
 
 ```
 python -W ignore run.py -p test -c config/harmonization_day2night_modified_allinone_2d_test.json
+```
 
 1D Embedding:
 
