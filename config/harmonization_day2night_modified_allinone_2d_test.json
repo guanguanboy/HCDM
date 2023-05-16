@@ -1,6 +1,6 @@
 {
     "name": "harmonization_allinone", // experiments name
-    "gpu_ids": [1], // gpu ids list, default is single 0
+    "gpu_ids": [1,2], // gpu ids list, default is single 0
     "seed" : -1, // random seed, seed <0 represents randomization not used 
     "finetune_norm": false, // find the parameters to optimize
 
@@ -11,7 +11,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         // "resume_state": "experiments/debug_inpainting_celebahq_220426_150122/checkpoint/1" 
-        "resume_state": "experiments/train_harmonization_allinone_230505_154431/checkpoint/550"//pretrained_model/checkpoint/770" //"experiments/train_harmonization_day2night_220520_113349/checkpoint/6300" //"experiments/train_harmonization_day2night_220511_105812/checkpoint/10000"//"experiments/train_harmonization_day2night_220506_220001/checkpoint/3370"//"experiments/train_harmonization_day2night_220430_123856/checkpoint/1850" // ex: 100, loading .state  and .pth from given epoch and iteration
+        "resume_state": "pretrained_model/checkpoint/2d_map/550"//"experiments/train_harmonization_allinone_230505_154431/checkpoint/550"//pretrained_model/checkpoint/770" //"experiments/train_harmonization_day2night_220520_113349/checkpoint/6300" //"experiments/train_harmonization_day2night_220511_105812/checkpoint/10000"//"experiments/train_harmonization_day2night_220506_220001/checkpoint/3370"//"experiments/train_harmonization_day2night_220430_123856/checkpoint/1850" // ex: 100, loading .state  and .pth from given epoch and iteration
     },
 
     "datasets": { // train or test
@@ -48,7 +48,7 @@
             "which_dataset": {
                 "name": "HarmonizationTestDataset", // import Dataset() class / function(not recommend) from default file
                 "args":{
-                    "data_root": "./TestData/Hday2night/composite_images_test/", //test on whole dataset /data1/liguanlin/Datasets/iHarmony/composite_images_test/
+                    "data_root": "./TestData/Hday2night/composite_images_test/",//"/data1/liguanlin/Datasets/RealHM/", //test on whole dataset /data1/liguanlin/Datasets/iHarmony/composite_images_test/
                     "mask_config": {
                         "mask_mode": "center"
                     }

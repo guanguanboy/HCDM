@@ -11,7 +11,7 @@
         "results": "results",
         "checkpoint": "checkpoint",
         // "resume_state": "experiments/debug_inpainting_celebahq_220426_150122/checkpoint/1" 
-        "resume_state": "pretrained_model/checkpoint/770" //"experiments/train_harmonization_day2night_220520_113349/checkpoint/6300" //"experiments/train_harmonization_day2night_220511_105812/checkpoint/10000"//"experiments/train_harmonization_day2night_220506_220001/checkpoint/3370"//"experiments/train_harmonization_day2night_220430_123856/checkpoint/1850" // ex: 100, loading .state  and .pth from given epoch and iteration
+        "resume_state": "pretrained_model/checkpoint/1D_embed/770" //"experiments/train_harmonization_day2night_220520_113349/checkpoint/6300" //"experiments/train_harmonization_day2night_220511_105812/checkpoint/10000"//"experiments/train_harmonization_day2night_220506_220001/checkpoint/3370"//"experiments/train_harmonization_day2night_220430_123856/checkpoint/1850" // ex: 100, loading .state  and .pth from given epoch and iteration
     },
 
     "datasets": { // train or test
