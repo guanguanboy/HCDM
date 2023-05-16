@@ -1,6 +1,6 @@
 This repo contains the code  paper:
 
-Real-World Image Harmoniation with Diffusion Modules
+Image Harmonization in Complex Degradation Scenes
 
 ### Pre-trained Models
 
