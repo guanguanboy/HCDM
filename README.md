@@ -16,6 +16,15 @@ Image Harmonization in Complex Degradation Scenes
 pip install -r requirements.txt
 ```
 
+### Train
+
+train on day2night dataset:
+
+```
+python -W ignore run.py -p train -c config/harmonization_day2night_modified_allinone.json
+```
+
+
 ### Test
 
 2D Map:
