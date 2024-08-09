@@ -1,6 +1,4 @@
-This repo contains the code  paper:
-
-Image Harmonization in Complex Degradation Scenes
+This repo provides the official  code  and datasets of the paper 'Image Harmonization in Complex Degradation Scenes'
 
 ### D-iHarmony4 dataset
 
