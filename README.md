@@ -4,7 +4,7 @@ Image Harmonization in Complex Degradation Scenes
 
 ### D-iHarmony4 dataset
 
-**We release the D-iHarmony4 dataset**. It contains 4 sub-datasets: **D-HCOCO**,**D-HAdobe5k**, **D-HFlickr**, and **D-Hday2night**, each of which contains degraded composite images, foreground masks of composite images and corresponding real images. The D-iHarmony4 dataset is provided in  [**Baidu Cloud**](https://pan.baidu.com/s/1z6VfVOKCJiQxTDxnVcsVJA) (access code: 5pfl) and [**Google Drive**](https://drive.google.com/drive/folders/1Hmlt0cnZTgxN_rMFZmK5DsWD2W0Yy9aT).
+**We release the D-iHarmony4 dataset**. It contains 4 sub-datasets: **D-HCOCO**,**D-HAdobe5k**, **D-HFlickr**, and **D-Hday2night**, each of which contains degraded composite images, foreground masks of composite images and corresponding real images. The D-iHarmony4 dataset is provided in  [**Baidu Cloud**](https://pan.baidu.com/s/1z6VfVOKCJiQxTDxnVcsVJA) (access code: 5pfl).
 
 | |D-HCOCO|D-HAdobe5k|D-HFlickr|D-Hday2night|D-iHarmony4 |
 |:--:|:--:|:--:|:--:|:--:|:--:|
