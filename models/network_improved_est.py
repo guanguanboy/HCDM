@@ -224,6 +224,8 @@ class Network(BaseNetwork):
             y_cond=y_cond,
             #inpaint_mask=source_mask_64.repeat(full_batch_size, 1, 1, 1).to(device),
             noise=noise,
+
+            gt = y_0
         )
         
         #torch.cat([y_cond, y_noisy*mask+(1.-mask)*y_0]

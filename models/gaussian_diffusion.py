@@ -1320,8 +1320,11 @@ class GaussianDiffusion:
 
             terms["loss"] = terms["loss"] + deep_loss
 
-            foreground_noise_level_gt = th.ones_like(x_t)*0.25
-            degradation_loss = 0.2 * (mean_flat(foreground_noise_map*mask- foreground_noise_level_gt*mask)**2) #for noise estimation
+            #foreground_noise_level_gt = th.ones_like(x_t)*0.25
+            #degradation_loss = 0.2 * (mean_flat(foreground_noise_map*mask- foreground_noise_level_gt*mask)**2) #for noise estimation
+            foreground_noise_map_gt = y_cond - x_start
+            degradation_loss = 0.2 * (mean_flat(foreground_noise_map*mask- foreground_noise_map_gt*mask)**2) #for noise estimation
+          
             terms["loss"] += degradation_loss
         else:
             raise NotImplementedError(self.loss_type)
